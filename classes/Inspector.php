@@ -32,6 +32,8 @@ class Inspector {
         foreach ($this->config['warning_strings'] as $k => $warning_string) {
             if (trim($warning_string) == '') {
                 unset($this->config['warning_strings'][$k]);
+            } else {
+                $this->config['warning_strings'][$k] = trim($warning_string);
             }
         }
 
