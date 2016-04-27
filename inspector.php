@@ -49,7 +49,7 @@ if (PHP_SAPI === 'cli') {
                     if ( ! empty($config['mail']) && ! empty($config['admin_email'])) {
                         $report_message = '<ol>';
                         foreach ($file_warnings as $file => $warning) {
-                            $report_message .= '<li>' . $file . ': <b>' . str_replace("\n", '', $warning) . '</b></li>';
+                            $report_message .= '<li>' . $file . ': <b>' . str_replace("\n", '', htmlspecialchars($warning)) . '</b></li>';
                         }
                         $report_message .= '</ol>';
 
