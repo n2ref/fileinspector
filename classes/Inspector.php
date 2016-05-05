@@ -77,12 +77,22 @@ class Inspector {
      * @param string $dir
      * @param string $filename
      * @param string $mtime
+     * @param string $user
+     * @param string $group
      * @return array
      */
-    public function fetchFiles($dir, $filename, $mtime) {
+    public function fetchFiles($dir, $filename, $mtime, $user = '', $group = '') {
 
         $files    = array();
         $cmd      = sprintf("find %s -iname '%s' -mtime -%d -type f", $dir, $filename, $mtime);
+
+        if ($user) {
+            $cmd .= sprintf(" -user %s", $user);
+        }
+        if ($group) {
+            $cmd .= sprintf(" -group %s", $group);
+        }
+
         exec($cmd, $files);
 
         return $files;
