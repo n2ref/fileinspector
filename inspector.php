@@ -92,7 +92,7 @@ if (PHP_SAPI === 'cli') {
             "\t-m\t--mtime\t\tFile modification time (in days)",
             'Optional arguments:',
             "\t-u\t--user\t\tFind file owned by user",
-            "\t-g\t--group\t\tFind the file belongs to group-name.",
+            "\t-g\t--group\t\tFind the file belongs to group-name",
             "\t-h\t--help\t\tHelp info",
             "Examples of usage:",
             "php inspector.php -d /var/www/ -f '*.php' -m 10",
