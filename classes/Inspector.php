@@ -28,7 +28,10 @@ class Inspector {
             throw new Exception("Empty parameter 'warning_strings' in configuration file '{$config_file}'");
         }
 
-        $this->config['warning_strings'] = explode(',', $this->config['warning_strings']);
+        if ( ! is_array($this->config['warning_strings'])) {
+            $this->config['warning_strings'] = explode(',', $this->config['warning_strings']);
+        }
+
         foreach ($this->config['warning_strings'] as $k => $warning_string) {
             if (trim($warning_string) == '') {
                 unset($this->config['warning_strings'][$k]);
@@ -54,16 +57,24 @@ class Inspector {
 
         if ( ! empty($file_content)) {
             foreach ($this->config['warning_strings'] as $warning_string) {
-                $pos_warning = mb_strpos($file_content, $warning_string, 0, 'utf-8');
-                if ($pos_warning !== false) {
 
-                    $str1 = mb_substr($file_content, $pos_warning - 25, 25, 'utf-8');
-                    $str1 = end(explode("\n", $str1));
+                $match = array();
+                $warning_string = preg_quote($warning_string, '~');
+                preg_match("~({$warning_string})~i", $file_content, $match);
 
-                    $str2 = mb_substr($file_content, $pos_warning, 25, 'utf-8');
-                    $str2 = current(explode("\n", $str2));
+                if ( ! empty($match) && ! empty($match[1])) {
+                    $pos_warning = mb_strpos($file_content, $match[1], 0, 'utf-8');
+                    if ($pos_warning !== false) {
+                        $str1 = mb_substr($file_content, $pos_warning - 25, 25, 'utf-8');
+                        $str1 = end(explode("\n", $str1));
 
-                    $warning = trim($str1 . $str2);
+                        $str2 = mb_substr($file_content, $pos_warning, 25, 'utf-8');
+                        $str2 = current(explode("\n", $str2));
+
+                        $warning = trim($str1 . $str2);
+                    } else {
+                        $warning = $match[1];
+                    }
                     break;
                 }
             }
